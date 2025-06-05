@@ -94,3 +94,124 @@ FinAltica Pro is designed for both individual users and small businesses to:
   - Chart.js & react-chartjs (charts)  
   - D3.js (custom visualizations)  
   - React Table (data grids)  
+
+
+---
+
+## Class Diagram
+
+```mermaid
+
+---
+
+title: FinAlticaPro
+
+---
+
+classDiagram
+
+    
+   class Bank {
+        <<entity>>
+        - username: String
+        - bankName: String
+        - balance: long
+    }
+    
+
+    class Card
+    <<interface>> Card
+
+
+    class CreditCard {
+      <<entity>>
+      - username: String
+      - creditCardName: String
+      - totalSpent: long
+      - limit: long
+      - currentLimit: long
+      - amountPaidFrom: String
+      - amountPaidTo: String
+      - amount: long
+    }
+
+
+    class DebitCard {
+      <<entity>>
+      - username: String
+      - debitCardName: String
+      - totalSpent: long 
+      - amount: long     
+      - amountPaidFrom: String
+      - amountPaidTo: String
+   }
+
+    class Cash {
+      <<entity>>
+      - username: String
+      - amountGiven: long
+      - changeReceivedIfAny: long
+      - amountPaidFrom: String
+      - amountPaidTo: String
+    }
+
+    class OnlineTransaction {
+      <<entity>>
+      - username: String
+      - amount: long
+      - amountPaidFrom: String
+      - amountPaidTo: String
+    }
+
+    class Investment
+    <<inteface>> Investment
+    
+    class InvestmentsMade {
+      <<entity>>
+      - username: String
+      - amountInvested: long
+      - amountInvestedOn: String
+    }
+
+    class InvestmentsSold {
+      <<entity>>
+      - username: String
+      - amountReturned: long
+      - amountReturnedFrom: String
+    }
+
+    class OnlineTransaction{
+      <<entity>>
+      - username: String
+      - 
+    }
+
+    class Transaction {
+      <<entity>>
+      - username: String
+      - amountSpentorEarned: String
+      - transactionType: long
+      - tranactionMethod: String
+      - transactionId: long
+      - transactionDescription:
+      - amountPaidFrom: String
+      - amountPaidTo: String
+    }
+
+    Investment<|--InvestmentsMade
+    Investment<|--InvestmentsSold
+
+    TransactionMethod<|--Investment
+    TransactionMethod<|--Cash
+    TransactionMethod<|--Card
+
+    Card --> Bank
+    Investment --> Bank
+    OnlineTransaction --> Bank
+
+    Transaction --> TransactionMethod
+    Card<|--CreditCard
+    Card<|--DebitCard
+
+    TransactionMethod<|--OnlineTransaction
+    
