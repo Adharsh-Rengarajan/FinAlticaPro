@@ -109,109 +109,192 @@ title: FinAlticaPro
 ---
 
 classDiagram
-
-    
-   class Bank {
+    %% User Management
+    class User {
         <<entity>>
-        - username: String
-        - bankName: String
-        - balance: long
-    }
-    
-
-    class Card
-    <<interface>> Card
-
-
-    class CreditCard {
-      <<entity>>
-      - username: String
-      - creditCardName: String
-      - totalSpent: long
-      - limit: long
-      - currentLimit: long
-      - amountPaidFrom: String
-      - amountPaidTo: String
-      - amount: long
+        -userId: Long
+        -firstName: String
+        -lastName: String
+        -username: String
+        -email: String
+        -password: String
+        -role: String
+        +createUser(): User
+        +validateUser(): Boolean
     }
 
+    class Account {
+        <<interface>>
+        +getBalance(): Long
+        +updateBalance(amount: Long): void
+        +getCurrency(): String
+    }
+
+    class BankAccount {
+        <<entity>>
+        -accountId: Long
+        -userId: Long
+        -bankName: String
+        -accountNumber: String
+        -accountType: String
+        -balance: Long
+        -currency: String
+        +deposit(amount: Long): void
+        +withdraw(amount: Long): Boolean
+    }
+
+    class CreditCardAccount {
+        <<entity>>
+        -creditCardId: Long
+        -userId: Long
+        -cardName: String
+        -currentBalance: Long
+        -creditLimit: Long
+        -availableCredit: Long
+        -interestRate: Double
+        -currency: String
+        +charge(amount: Long): Boolean
+        +makePayment(amount: Long): void
+        +calculateAvailableCredit(): Long
+    }
+
+    class InvestmentAccount {
+        <<entity>>
+        -investmentId: Long
+        -userId: Long
+        -brokerName: String
+        -accountNumber: String
+        -totalValue: Long
+        -currency: String
+        +addInvestment(): void
+        +sellInvestment(): void
+        +updateMarketValue(): void
+    }
+
+    %% Payment Method Interface and Implementations
+    class PaymentMethod {
+        <<interface>>
+        +getPaymentMethodType(): String
+        +getLinkedAccountId(): Long
+        +isActive(): Boolean
+    }
 
     class DebitCard {
-      <<entity>>
-      - username: String
-      - debitCardName: String
-      - totalSpent: long 
-      - amount: long     
-      - amountPaidFrom: String
-      - amountPaidTo: String
-   }
-
-    class Cash {
-      <<entity>>
-      - username: String
-      - amountGiven: long
-      - changeReceivedIfAny: long
-      - amountPaidFrom: String
-      - amountPaidTo: String
+        <<entity>>
+        -debitCardId: Long
+        -userId: Long
+        -cardNumber: String
+        -cardName: String
+        -linkedBankAccountId: Long
+        -totalSpent: Long
+        -isActive: Boolean
+        +processPayment(amount: Long): Boolean
     }
 
-    class OnlineTransaction {
-      <<entity>>
-      - username: String
-      - amount: long
-      - amountPaidFrom: String
-      - amountPaidTo: String
+    class CreditCard {
+        <<entity>>
+        -creditCardId: Long
+        -userId: Long
+        -cardNumber: String
+        -cardName: String
+        -linkedCreditAccountId: Long
+        -totalSpent: Long
+        -monthlySpent: Long
+        -isActive: Boolean
+        +processPayment(amount: Long): Boolean
+        +calculateMonthlySpending(): Long
     }
 
-    class Investment
-    <<inteface>> Investment
-    
-    class InvestmentsMade {
-      <<entity>>
-      - username: String
-      - amountInvested: long
-      - amountInvestedOn: String
+    class OnlineTransfer {
+        <<entity>>
+        -onlineTransferId: Long
+        -userId: Long
+        -transferMethod: String
+        -linkedAccountId: Long
+        -totalTransactions: Long
+        +initiateTransfer(amount: Long): Boolean
     }
 
-    class InvestmentsSold {
-      <<entity>>
-      - username: String
-      - amountReturned: long
-      - amountReturnedFrom: String
+    class CashPayment {
+        <<entity>>
+        -cashPaymentId: Long
+        -userId: Long
+        -totalCashSpent: Long
+        +recordCashPayment(amount: Long): void
     }
 
-    class OnlineTransaction{
-      <<entity>>
-      - username: String
-      - 
-    }
-
+    %% Transaction Management
     class Transaction {
-      <<entity>>
-      - username: String
-      - amountSpentorEarned: String
-      - transactionType: long
-      - tranactionMethod: String
-      - transactionId: long
-      - transactionDescription:
-      - amountPaidFrom: String
-      - amountPaidTo: String
+        <<entity>>
+        -transactionId: Long
+        -userId: Long
+        -amount: Long
+        -transactionType: String
+        -paymentMethodType: String
+        -paymentMethodId: Long
+        -linkedAccountId: Long
+        -category: String
+        -description: String
+        -transactionDate: LocalDateTime
+        -fromAccount: String
+        -toAccount: String
+        -currency: String
+        -isRecurring: Boolean
+        +createTransaction(): Transaction
+        +validateTransaction(): Boolean
+        +updateAccountBalances(): void
     }
 
-    Investment<|--InvestmentsMade
-    Investment<|--InvestmentsSold
+    class RecurringTransaction {
+        <<entity>>
+        -recurringId: Long
+        -userId: Long
+        -templateTransactionId: Long
+        -frequency: String
+        -nextExecutionDate: LocalDate
+        -isActive: Boolean
+        +scheduleNext(): void
+        +executeRecurring(): void
+    }
 
-    TransactionMethod<|--Investment
-    TransactionMethod<|--Cash
-    TransactionMethod<|--Card
+    %% Investment Tracking
+    class Investment {
+        <<entity>>
+        -investmentId: Long
+        -userId: Long
+        -investmentAccountId: Long
+        -ticker: String
+        -shares: Double
+        -purchasePrice: Double
+        -purchaseDate: LocalDate
+        -currentPrice: Double
+        -totalValue: Double
+        +calculateCurrentValue(): Double
+        +calculateProfitLoss(): Double
+    }
 
-    Card --> Bank
-    Investment --> Bank
-    OnlineTransaction --> Bank
+    %% Category Management
+    class Category {
+        <<entity>>
+        -categoryId: Long
+        -userId: Long
+        -categoryName: String
+        -budgetLimit: Long
+        -currentSpent: Long
+        -alertThreshold: Double
+        +checkBudgetAlert(): Boolean
+    }
 
-    Transaction --> TransactionMethod
-    Card<|--CreditCard
-    Card<|--DebitCard
+   
 
-    TransactionMethod<|--OnlineTransaction
+    %% Interface Implementations
+    Account <|.. BankAccount
+    Account <|.. CreditCardAccount
+    Account <|.. InvestmentAccount
+
+    PaymentMethod <|.. DebitCard
+    PaymentMethod <|.. CreditCard
+    PaymentMethod <|.. OnlineTransfer
+    PaymentMethod <|.. CashPayment
+
     
