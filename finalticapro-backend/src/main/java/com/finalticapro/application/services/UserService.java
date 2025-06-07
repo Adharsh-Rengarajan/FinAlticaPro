@@ -45,6 +45,18 @@ public class UserService {
 		UserResponseDTO userResponseDTO=new UserResponseDTO(user.getUserId(),user.getFirstName(),user.getLastName(),user.getUsername(),user.getEmail(),user.getRole(),user.getUpdatedAt());
 		return userResponseDTO;
 	}
+
+	public UserResponseDTO login(String username, String password) {
+		User user = userRepository.findByUsername(username);
+		if(user!=null)
+		{
+			return changeToUserDTO(user);
+		}
+		else
+		{
+			throw new RuntimeException("Username or password mismatch");
+		}
+	}
 	
 	
 }
