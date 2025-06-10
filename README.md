@@ -119,28 +119,24 @@ classDiagram
         -email: String
         -password: String
         -role: String
-        +createUser(): User
-        +validateUser(): Boolean
-    }
-
-    class Account {
-        <<interface>>
-        +getBalance(): Long
-        +updateBalance(amount: Long): void
-        +getCurrency(): String
+        -bankAccounts: List<BankAccount>
+        -creditCardAccounts: List<CreditCardAccounts>
+        -investmentAccounts: List<InvestmentAccounts>
     }
 
     class BankAccount {
         <<entity>>
         -accountId: Long
-        -userId: Long
+        -user: User
         -bankName: String
         -accountNumber: String
         -accountType: String
-        -balance: Long
-        -currency: String
-        +deposit(amount: Long): void
-        +withdraw(amount: Long): Boolean
+        -balance: BigDecimal
+        -currencyType: String
+        -totalSpent: BigDecimal
+        -createdAt: LocalDateTime
+        -updatedAt: LocalDateTime
+        
     }
 
     class CreditCardAccount {
@@ -148,27 +144,24 @@ classDiagram
         -creditCardId: Long
         -userId: Long
         -cardName: String
-        -currentBalance: Long
-        -creditLimit: Long
+        -currentBalance: BigDecimal
+        -creditLimit: BigDecimal
         -availableCredit: Long
         -interestRate: Double
         -currency: String
-        +charge(amount: Long): Boolean
-        +makePayment(amount: Long): void
-        +calculateAvailableCredit(): Long
+        -createdAt: LocalDateTime
+        -updatedAt: LocalDateTime
     }
 
     class InvestmentAccount {
         <<entity>>
         -investmentId: Long
-        -userId: Long
+        -user: User
         -brokerName: String
-        -accountNumber: String
-        -totalValue: Long
+        -totalValueInvested: BigDecimal
         -currency: String
-        +addInvestment(): void
-        +sellInvestment(): void
-        +updateMarketValue(): void
+        -createdAt: LocalDateTime
+        -updatedAt: LocalDateTime
     }
 
     %% Payment Method Interface and Implementations
@@ -286,11 +279,6 @@ classDiagram
     }
 
    
-
-    %% Interface Implementations
-    Account <|.. BankAccount
-    Account <|.. CreditCardAccount
-    Account <|.. InvestmentAccount
 
     PaymentMethod <|.. DebitCard
     PaymentMethod <|.. CreditCard
