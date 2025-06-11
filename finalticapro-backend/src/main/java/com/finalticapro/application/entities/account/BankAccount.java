@@ -38,9 +38,7 @@ public class BankAccount {
     @Column(name = "currency_type", nullable = false, length = 3)
     private String currencyType;
     
-    @Column(name = "total_spent", precision = 15, scale = 2)
-    private BigDecimal totalSpent = BigDecimal.ZERO;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -58,7 +56,6 @@ public class BankAccount {
         this.accountNumber = accountNumber;
         this.currencyType = currencyType;
         this.balance = balance;
-        this.totalSpent = BigDecimal.ZERO;
     }
 
     
@@ -119,13 +116,6 @@ public class BankAccount {
         this.currencyType = currencyType;
     }
     
-    public BigDecimal getTotalSpent() {
-        return totalSpent;
-    }
-    
-    public void setTotalSpent(BigDecimal totalSpent) {
-        this.totalSpent = totalSpent;
-    }
     
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -148,6 +138,6 @@ public class BankAccount {
         return "BankAccount [accountId=" + accountId + ", bankName=" + bankName
                 + ", accountType=" + accountType + ", accountNumber=" + accountNumber 
                 + ", balance=" + balance + ", currencyType=" + currencyType 
-                + ", totalSpent=" + totalSpent + "]";
+                +"]";
     }
 }
