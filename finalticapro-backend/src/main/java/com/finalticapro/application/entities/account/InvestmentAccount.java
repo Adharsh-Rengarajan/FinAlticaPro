@@ -52,7 +52,7 @@ public class InvestmentAccount {
 	public InvestmentAccount() {}
 
 
-	public InvestmentAccount(long investmentId, User user, String brokerName, BigDecimal totalValueInvested,
+	public InvestmentAccount(User user, String brokerName, BigDecimal totalValueInvested,
 			String currency) {
 		super();
 		this.investmentId = investmentId;
@@ -62,8 +62,6 @@ public class InvestmentAccount {
 		this.currency = currency;
 	}
 
-
-	// Getters and Setters
 	
 	public long getInvestmentId() {
 		return investmentId;

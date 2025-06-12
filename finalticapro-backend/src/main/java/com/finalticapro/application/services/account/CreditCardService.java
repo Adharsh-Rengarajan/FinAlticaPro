@@ -22,7 +22,7 @@ public class CreditCardService {
 			throw new IllegalArgumentException("Account or User cannot be null");
 		}
 		
-		boolean accountExists = creditCardRepository.existsByUserUserIdAndCardNameAndAccountType(
+		boolean accountExists = creditCardRepository.existsByUserUserIdAndCardName(
 				account.getUser().getUserId(), account.getCardName(), account.getCurrency()
 				);
 		
@@ -33,7 +33,6 @@ public class CreditCardService {
 		
 		return creditCardRepository.save(account);
 	}
-	
 	
 	
 	public void updateBalance(Long accountId, BigDecimal amount) {
