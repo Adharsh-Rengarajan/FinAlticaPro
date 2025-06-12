@@ -32,9 +32,6 @@ public class CreditCardAccount {
     @Column(name = "credit_limit", precision = 15, scale = 2, nullable = false)
     private BigDecimal creditLimit;
     
-    @Column(name = "interest_rate", precision = 5, scale = 2)
-    private BigDecimal interestRate;
-    
     @Column(name = "currency", nullable = false, length = 3)
     private String currency;
     
@@ -49,11 +46,10 @@ public class CreditCardAccount {
 
     public CreditCardAccount() {}
     
-    public CreditCardAccount(User user, String cardName, BigDecimal creditLimit, BigDecimal interestRate, String currency) {
+    public CreditCardAccount(User user, String cardName, BigDecimal creditLimit, String currency) {
         this.user = user;
         this.cardName = cardName;
         this.creditLimit = creditLimit;
-        this.interestRate = interestRate;
         this.currency = currency;
         this.currentBalance = BigDecimal.ZERO;
     }
@@ -99,13 +95,6 @@ public class CreditCardAccount {
         this.creditLimit = creditLimit;
     }
     
-    public BigDecimal getInterestRate() {
-        return interestRate;
-    }
-    
-    public void setInterestRate(BigDecimal interestRate) {
-        this.interestRate = interestRate;
-    }
     
     public String getCurrency() {
         return currency;
@@ -135,6 +124,6 @@ public class CreditCardAccount {
     public String toString() {
         return "CreditCardAccount [creditCardId=" + creditCardId + ", cardName=" + cardName
                 + ", currentBalance=" + currentBalance + ", creditLimit=" + creditLimit 
-                + ", interestRate=" + interestRate + ", currency=" + currency + "]";
+                +  ", currency=" + currency + "]";
     }
 }
