@@ -31,8 +31,6 @@ public class Transaction {
     @Column(name = "linked_account_id")
     private Long linkedAccountId;
     
-    @Column(name = "category")
-    private String category;
     
     @Column(name = "description")
     private String description; 
@@ -56,7 +54,7 @@ public class Transaction {
     
     public Transaction(Long transactionId, Long userId, BigDecimal amount, String transactionType, 
                       String paymentMethodType, Long paymentMethodId, Long linkedAccountId, 
-                      String category, String description, String fromAccount, String toAccount, 
+                      String description, String fromAccount, String toAccount, 
                       String currency, boolean isRecurring, LocalDateTime transactionDate) {
         this.transactionId = transactionId;
         this.userId = userId;
@@ -65,7 +63,6 @@ public class Transaction {
         this.paymentMethodType = paymentMethodType;
         this.paymentMethodId = paymentMethodId;
         this.linkedAccountId = linkedAccountId;
-        this.category = category;
         this.description = description;
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
@@ -130,14 +127,6 @@ public class Transaction {
         this.linkedAccountId = linkedAccountId;
     }
     
-    public String getCategory() {
-        return category;
-    }
-    
-    public void setCategory(String category) {
-        this.category = category;
-    }
-    
     public String getDescription() {
         return description;
     }
@@ -185,14 +174,15 @@ public class Transaction {
     public void setTransactionDate(LocalDateTime transactionDate) {
         this.transactionDate = transactionDate;
     }
+
+	@Override
+	public String toString() {
+		return "Transaction [transactionId=" + transactionId + ", userId=" + userId + ", amount=" + amount
+				+ ", transactionType=" + transactionType + ", paymentMethodType=" + paymentMethodType
+				+ ", paymentMethodId=" + paymentMethodId + ", linkedAccountId=" + linkedAccountId + ", description="
+				+ description + ", fromAccount=" + fromAccount + ", toAccount=" + toAccount + ", currency=" + currency
+				+ ", isRecurring=" + isRecurring + ", transactionDate=" + transactionDate + "]";
+	}
     
-    @Override
-    public String toString() {
-        return "Transaction [transactionId=" + transactionId + ", userId=" + userId + ", amount=" + amount
-                + ", transactionType=" + transactionType + ", paymentMethodType=" + paymentMethodType 
-                + ", paymentMethodId=" + paymentMethodId + ", linkedAccountId=" + linkedAccountId 
-                + ", category=" + category + ", description=" + description + ", fromAccount=" + fromAccount 
-                + ", toAccount=" + toAccount + ", currency=" + currency + ", isRecurring=" + isRecurring 
-                + ", transactionDate=" + transactionDate + "]";
-    }
+    
 }
