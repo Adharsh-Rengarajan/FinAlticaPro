@@ -1,10 +1,12 @@
 package com.finalticapro.application.services.account;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.finalticapro.application.entities.account.CreditCardAccount;
 import com.finalticapro.application.entities.account.InvestmentAccount;
 import com.finalticapro.application.repository.InvestmentRepository;
 
@@ -33,7 +35,7 @@ public class InvestmentService {
 		return investmentRepository.save(account);
 	}	
 	
-	public void updateTotalValueInvestment(Long id, BigDecimal amount)
+	public void updateTotalValueInvested(Long id, BigDecimal amount)
 	{
 		investmentRepository.updateTotalValueInvested(id, amount);
 	}
@@ -48,6 +50,11 @@ public class InvestmentService {
 	{
 		investmentRepository.deleteAccount(id);
 	}
+	
+    public List<InvestmentAccount> getAllAccounts(Long userId) {
+        return investmentRepository.findByUserUserId(userId); 
+    }
+    
 	
 	
 }

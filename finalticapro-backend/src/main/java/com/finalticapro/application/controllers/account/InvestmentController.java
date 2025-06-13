@@ -55,11 +55,11 @@ public class InvestmentController {
 	
 	
 	@GetMapping("/accounts/get/{userId}")
-	public ResponseEntity<List<CreditCardAccount>> getAllAccount(@PathVariable Long userId)
+	public ResponseEntity<List<InvestmentAccount>> getAllAccount(@PathVariable Long userId)
 	{
 		try {
-			List<CreditCardAccount> creditCardAccounts=investmentService.getAllAccounts(userId);
-			return ResponseEntity.ok(creditCardAccounts);
+			List<InvestmentAccount> investmentAccounts=investmentService.getAllAccounts(userId);
+			return ResponseEntity.ok(investmentAccounts);
 		}
 		catch(Exception e)
 		{
@@ -73,7 +73,7 @@ public class InvestmentController {
 		
 		
 		try {
-			investmentService.updateBalance(accountId, request.get("balance"));
+			investmentService.updateTotalValueInvested(accountId, request.get("balance"));
 			return ResponseEntity.ok("Balance updated succesfully");
 		}
 		catch(Exception e)
@@ -98,9 +98,7 @@ public class InvestmentController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-	
-	
-	
+
 	
 	@DeleteMapping("/accounts/delete/{accountId}")
 	public ResponseEntity<String> deleteAccount(@PathVariable Long accountId)
