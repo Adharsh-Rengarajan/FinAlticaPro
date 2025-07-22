@@ -1,0 +1,301 @@
+openapi: 3.0.0
+info:
+  title: Credit Card Service API
+  version: 1.0.0
+  description: API documentation for the Credit Card Service in FinalticaPro
+
+servers:
+  - url: http://localhost:8082
+    description: Local Development Server
+
+paths:
+  /credit-cards:
+    post:
+      summary: Create a new credit card
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Credit card created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCard'
+
+  /credit-cards/{id}:
+    get:
+      summary: Get credit card by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Credit card details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCard'
+
+    delete:
+      summary: Delete a credit card
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Card deleted successfully
+
+  /credit-cards/{id}/name:
+    put:
+      summary: Update card name
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Card updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCard'
+
+  /credit-cards/{id}/type:
+    put:
+      summary: Update card type
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Card updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCard'
+
+  /credit-cards/{id}/issuer:
+    put:
+      summary: Update issuer
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Card updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCard'
+
+  /credit-cards/{id}/limit:
+    put:
+      summary: Update credit limit
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: number
+              format: double
+      responses:
+        '200':
+          description: Card updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCard'
+
+  /credit-cards/{id}/billing-date:
+    put:
+      summary: Update billing date
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              format: date
+      responses:
+        '200':
+          description: Card updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCard'
+
+  /credit-cards/{id}/expiry-date:
+    put:
+      summary: Update expiry date
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              format: date
+      responses:
+        '200':
+          description: Card updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCard'
+
+  /credit-cards/{id}/card-number:
+    put:
+      summary: Update last 4 digits of card number
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              pattern: '^\d{4}$'
+      responses:
+        '200':
+          description: Card updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCard'
+
+  /credit-cards/validate:
+    post:
+      summary: Validate credit card transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationRequestDTO'
+      responses:
+        '200':
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                type: boolean
+
+  /credit-cards/{id}/record-usage:
+    post:
+      summary: Record usage after transaction
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: number
+              format: double
+      responses:
+        '200':
+          description: Usage recorded
+
+components:
+  schemas:
+    CreditCard:
+      type: object
+      properties:
+        id:
+          type: integer
+        cardName:
+          type: string
+        cardType:
+          type: string
+        issuer:
+          type: string
+        creditLimit:
+          type: number
+          format: double
+        totalSpent:
+          type: number
+          format: double
+        billingDate:
+          type: string
+          format: date
+        expiryDate:
+          type: string
+          format: date
+        cardNumber:
+          type: string
+          description: Last 4 digits only
+        userId:
+          type: integer
+
+    ValidationRequestDTO:
+      type: object
+      properties:
+        userId:
+          type: integer
+        cardId:
+          type: integer
+        amount:
+          type: number
+          format: double
