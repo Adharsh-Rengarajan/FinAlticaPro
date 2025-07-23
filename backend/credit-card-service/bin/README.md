@@ -1,88 +1,81 @@
-# Credit Card Service - FinalticaPro
+# Credit Card Service – FinalticaPro
 
-The Credit Card Service is a standalone microservice within the FinalticaPro personal finance management platform. It is responsible for managing user-defined credit card accounts, performing transaction validations, and maintaining usage statistics.
-
----
-
-## Overview
-
-This service provides RESTful APIs to:
-- Create and update credit card details
-- Validate card usage against available credit limit
-- Track cumulative spending per card
-- Integrate with the Transaction Service for spending authorization
-- Allow users full control over their registered credit card records
+The Credit Card Service is a Spring Boot microservice in the FinalticaPro platform. It manages user-defined credit card records, validates transactions, and tracks usage statistics. This service integrates with the Transaction Service to enforce credit limits before approving spending.
 
 ---
 
-## Endpoints
+## Features
 
-| HTTP Method | Endpoint                            | Description                                |
-|-------------|-------------------------------------|--------------------------------------------|
-| POST        | `/credit-cards`                     | Create a new credit card                   |
-| GET         | `/credit-cards/{id}`                | Retrieve card details by ID                |
-| PUT         | `/credit-cards/{id}/name`           | Update the card's name                     |
-| PUT         | `/credit-cards/{id}/type`           | Update the card's type                     |
-| PUT         | `/credit-cards/{id}/issuer`         | Update the card's issuer                   |
-| PUT         | `/credit-cards/{id}/limit`          | Update the card's credit limit             |
-| PUT         | `/credit-cards/{id}/billing-date`   | Update the billing date                    |
-| PUT         | `/credit-cards/{id}/expiry-date`    | Update the expiry date                     |
-| PUT         | `/credit-cards/{id}/card-number`    | Update the last 4 digits of the card       |
-| POST        | `/credit-cards/validate`            | Validate a transaction against a card      |
-| POST        | `/credit-cards/{id}/record-usage`   | Record usage after successful transaction  |
-| DELETE      | `/credit-cards/{id}`                | Delete a credit card                       |
+- Create and manage credit card details
+- Update individual credit card fields (name, type, issuer, limit, billing date, etc.)
+- Validate transactions before processing
+- Delete credit card records
+- Designed for microservice integration via API Gateway and FeignClient
 
 ---
 
-## Method Reference
+## Technologies Used
 
-### createCard(JsonNode card): CreditCard  
-Creates a new credit card entry using user-provided details.
-
-### getCardById(Long cardId): CreditCard  
-Retrieves the credit card information for a given ID.
-
-### updateCardName(String name, Long id): CreditCard  
-Updates the display name of the credit card.
-
-### updateCardType(String type, Long id): CreditCard  
-Updates the type of the credit card (e.g., Credit, Virtual).
-
-### updateIssuer(String issuer, Long id): CreditCard  
-Updates the card issuer (e.g., ICICI, HDFC).
-
-### updateCreditLimit(double limit, Long id): CreditCard  
-Modifies the card's maximum credit limit.
-
-### updateBillingDate(LocalDate billingDate, Long id): CreditCard  
-Changes the billing cycle anchor date.
-
-### updateExpiryDate(LocalDate expiryDate, Long id): CreditCard  
-Updates the expiry date of the card.
-
-### updateCardNumber(String digits, Long id): CreditCard  
-Stores the last 4 digits of the credit card number.
-
-### validateTransaction(Long userId, Long cardId, double amount): boolean  
-Checks if a transaction is allowed based on available balance and ownership.
-
-### recordUsage(Long cardId, double amount): void  
-Increases the totalSpent after a successful card-based transaction.
-
-### deleteCard(Long cardId): void  
-Removes the credit card record permanently.
+- Java 17
+- Spring Boot 3
+- Spring Data JPA (PostgreSQL)
+- Spring Web
+- Jackson (for JSON handling)
+- RESTful API Design
+- Maven
 
 ---
 
-## Architecture Diagram
+## API Endpoints
 
-> Architecture diagram showing how the components of credit-card-service will interact with each other
-![Architecture Diagram](./documentation/architecture.png)
+| Method | Endpoint                            | Description                                |
+|--------|-------------------------------------|--------------------------------------------|
+| POST   | `/creditcard/create`                | Create a new credit card                   |
+| GET    | `/creditcard/get/{id}`              | Retrieve card details by ID                |
+| PATCH  | `/creditcard/update/{id}`           | Update credit card details via DTO         |
+| DELETE | `/creditcard/delete/{id}`           | Delete a credit card                       |
+| POST   | `/creditcard/validate`              | Validate a transaction request             |
+
+---
+
+## Controller Method Summary
+
+### createCard(JsonNode data): CreditCard  
+Creates a new credit card after checking for duplicate card numbers.
+
+### getCard(Long id): CreditCard  
+Fetches credit card details for a given ID.
+
+### updateCard(Long id, UpdateCreditCardRequestDTO dto): CreditCard  
+Updates credit card fields provided via DTO.
+
+### validateTransaction(ValidateCardRequestDTO dto): boolean  
+Validates whether a transaction is allowed based on credit limit and user association.
+
+### deleteCard(Long id): boolean  
+Deletes the credit card from the database if it exists.
+
+---
+
+## Swagger/OpenAPI
+
+- The OpenAPI specification for this service is defined in `openapi.yaml`
+- Available endpoints follow the `/creditcard` base path.
+- Supports schema definitions for `CreditCard` and `ValidateCardRequestDTO`
 
 ---
 
 ## Notes
 
-- All card number handling must store only the last four digits.
-- Credit limit enforcement is handled internally before usage is recorded.
-- This service does not directly store or access User details — `userId` is passed from external services.
+- Only the last four digits of the card number are stored for privacy.
+- All validations are handled before any financial transaction is accepted.
+- The service does not fetch or manage user data directly—`userId` is passed from external services.
+- This service is not yet integrated with a service registry or gateway (to be added later).
+
+---
+
+## Getting Started
+
+1. Clone the repository
+2. Configure `application.yml` with your PostgreSQL DB
+3. Build the project:
